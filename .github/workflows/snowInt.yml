@@ -1,0 +1,31 @@
+name: Notify ServiceNow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-servicenow-incident:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create ServiceNow Incident
+      env:
+        SNOW_INSTANCE: https://dev209441.service-now.com
+        SNOW_USERNAME: admin
+        SNOW_PASSWORD: elV5M=^qq2QW
+      run: |
+        incident_data=$(jq -n \
+          --arg short_description "GitHub Actions triggered a notification" \
+          --arg description "This is a test notification from a GitHub Actions workflow." \
+          '{short_description: $short_description, description: $description}')
+
+        curl -X POST \
+          -H "Content-Type: application/json" \
+          -u $SNOW_USERNAME:$SNOW_PASSWORD \
+          --data "$incident_data" \
+          https://dev209441.service-now.com/api/now/table/incident
