@@ -20,12 +20,11 @@ jobs:
         SNOW_PASSWORD: elV5M=^qq2QW
       run: |
         incident_data=$(jq -n \
-          --arg short_description "GitHub Actions triggered a notification" \
-          --arg description "This is a test notification from a GitHub Actions workflow." \
-          '{short_description: $short_description, description: $description}')
+          --arg testKey "Hello from GitHub" \
+          '{testKey: $testKey}')
 
         curl -X POST \
           -H "Content-Type: application/json" \
           -u $SNOW_USERNAME:$SNOW_PASSWORD \
           --data "$incident_data" \
-          https://dev209441.service-now.com/api/now/table/incident
+          https://dev209441.service-now.com/api/sn_dpr_content/get_github_data
